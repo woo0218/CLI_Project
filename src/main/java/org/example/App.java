@@ -103,12 +103,27 @@ public class App {
 
         int id = Integer.parseInt(cmdBits[1]);
 
-        modify(id);
+        WiseSaying wiseSaying = findById(id);
+
+        System.out.printf("명언(기존) : %s\n",  wiseSaying.getContent());
+        System.out.print("명언 : ");
+        String content = scanner.nextLine().trim();
+
+        System.out.printf("작가(기존) : %s\n",  wiseSaying.getAuthor());
+        System.out.print("작가 : ");
+        String author = scanner.nextLine().trim();
+
+        modify(wiseSaying, content, author);
 
         System.out.println("%d번 명언이 수정 되었습니다.".formatted(id));
     }
 
-    void modify(int id) {
+    void modify(WiseSaying wiseSaying, String content, String author) {
+        wiseSaying.setContent(content);
+        wiseSaying.setAuthor(author);
+    }
+
+    WiseSaying findById(int id) {
         WiseSaying wiseSaying = null;
         for (int i = 0; i < wiseSayingList.size(); i ++) {
             if (wiseSayingList.get(i).getId() == id) {
@@ -118,18 +133,10 @@ public class App {
 
         if (wiseSaying == null) {
             System.out.println("해당 아이디는 존재하지 않습니다.");
-            return;
+            return null;
         }
 
-        System.out.printf("명언(기존) : %s\n",  wiseSaying.getContent());
-        System.out.print("명언 : ");
-        String content = scanner.nextLine().trim();
-        wiseSaying.setContent(content);
-
-        System.out.printf("작가(기존) : %s\n",  wiseSaying.getAuthor());
-        System.out.print("작가 : ");
-        String author = scanner.nextLine().trim();
-        wiseSaying.setAuthor(author);
+        return wiseSaying;
     }
 }
 
