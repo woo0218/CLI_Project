@@ -1,19 +1,22 @@
 package org.example;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main{
-    static void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("== 명언 앱 ==");
         Scanner scanner = new Scanner(System.in);
+
+        List<WiseSaying> wiseSayingList = new ArrayList<>();
+
+        int lastId = 0;
 
         while (true) {
             System.out.print("명령) ");
             String cmd = scanner.nextLine().trim();
-
-//            System.out.println("입력된 명령: " + cmd);
-//            break;
 
             if (cmd.equals("종료")) {
                 System.out.println("프로그램을 종료합니다.");
@@ -25,7 +28,25 @@ public class Main{
                 System.out.print("작가 : ");
                 String wiseSayingAuthor = scanner.nextLine().trim();
 
-                System.out.println("1번 명언이 등록되었습니다.");
+                int id = ++lastId;
+
+                WiseSaying wiseSaying = new WiseSaying();
+
+                wiseSaying.id = id;
+                wiseSaying.content = wiseSayingContent;
+                wiseSaying.author = wiseSayingAuthor;
+
+                wiseSayingList.add(wiseSaying);
+
+                System.out.println("%d번 명언이 등록되었습니다.".formatted(id) );
+            } else if (cmd.equals("목록")) {
+                System.out.println("번호 / 작가 / 명언");
+                System.out.println("----------------------");
+
+                for (int i = wiseSayingList.size() - 1; i >= 0; i--) {
+                    WiseSaying wiseSaying = wiseSayingList.get(i);
+                    System.out.println("%d / %s, %s".formatted(wiseSaying.id, wiseSaying.author, wiseSaying.content));
+                }
             }
         }
 
