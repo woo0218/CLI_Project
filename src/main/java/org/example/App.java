@@ -72,24 +72,14 @@ public class App {
 
         int id = Integer.parseInt(cmdBits[1]);
 
-        delete(id);
+        WiseSaying wiseSaying = findById(id);
+
+        delete(wiseSaying);
 
         System.out.println("%d번 명언이 삭제되었습니다.".formatted(id));
     }
 
-    void delete(int id) {
-        WiseSaying wiseSaying = null;
-        for (int i = 0; i < wiseSayingList.size(); i++) {
-            if (wiseSayingList.get(i).getId() == id) {
-                wiseSaying = wiseSayingList.get(i);
-            }
-        }
-
-        if (wiseSaying == null) {
-            System.out.println("해당 아이디는 존재하지 않습니다.");
-            return;
-        }
-
+    void delete(WiseSaying wiseSaying) {
         wiseSayingList.remove(wiseSaying);
     }
 
@@ -125,7 +115,7 @@ public class App {
 
     WiseSaying findById(int id) {
         WiseSaying wiseSaying = null;
-        for (int i = 0; i < wiseSayingList.size(); i ++) {
+        for (int i = 0; i < wiseSayingList.size(); i++) {
             if (wiseSayingList.get(i).getId() == id) {
                 wiseSaying = wiseSayingList.get(i);
             }
