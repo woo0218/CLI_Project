@@ -6,9 +6,8 @@ import java.util.Scanner;
 
 public class App {
     Scanner scanner = new Scanner(System.in);
-    List<WiseSaying> wiseSayingList = new ArrayList<>();
     int lastId = 0;
-
+    List<WiseSaying> wiseSayingList = new ArrayList<>();
 
     void run () {
         System.out.println("== 명언 앱 ==");
@@ -20,47 +19,44 @@ public class App {
             if (cmd.equals("종료")) {
                 System.out.println("프로그램을 종료합니다.");
                 break;
-            } else if (cmd.equals("등록")) {
+            } else  if (cmd.equals("등록")) {
                 actionWrite();
             } else if (cmd.equals("목록")) {
                 actionList();
-                }
-
+            }
         }
 
         scanner.close();
     }
 
-    void actionWrite () {
-        System.out.print("명언 : ");
-        String wiseSayingContent = scanner.nextLine().trim();
+    void actionWrite() {
+        System.out.print("명언: ");
+        String content = scanner.nextLine().trim();
 
-        System.out.print("작가 : ");
-        String wiseSayingAuthor = scanner.nextLine().trim();
+        System.out.print("작가: ");
+        String author = scanner.nextLine().trim();
 
-        int id = ++lastId;
+        WiseSaying wiseSaying = write(author, content);
 
-        WiseSaying wiseSaying = new WiseSaying();
+        System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSaying.getId()));
+    }
 
-        wiseSaying.id = id;
-        wiseSaying.content = wiseSayingContent;
-        wiseSaying.author = wiseSayingAuthor;
+    WiseSaying write (String author, String content) {
+        WiseSaying wiseSaying = new WiseSaying(++lastId, author, content );
 
         wiseSayingList.add(wiseSaying);
 
-        System.out.println("%d번 명언이 등록되었습니다.".formatted(id) );
+        return wiseSaying;
     }
 
-    void actionList () {
+    void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
 
-        for (int i = wiseSayingList.size() - 1; i >= 0; i--) {
+        for (int i = wiseSayingList.size() - 1; i >=0; i--) {
             WiseSaying wiseSaying = wiseSayingList.get(i);
-            if (wiseSaying == null) {
-                continue;
-            }
-            System.out.println("%d / %s, %s".formatted(wiseSaying.id, wiseSaying.author, wiseSaying.content));
+            System.out.println("%d / %s / %s".formatted(wiseSaying.getId(), wiseSaying.getId(), wiseSaying.getContent()));
+        }
     }
 }
 
