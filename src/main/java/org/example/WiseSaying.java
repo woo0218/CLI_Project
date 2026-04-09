@@ -5,21 +5,33 @@ public class WiseSaying {
     private String author;
     private String content;
 
-    public WiseSaying(int id, String content, String author) {
+    WiseSaying (int id, String author, String content) {
         this.id = id;
+        this.author = author;
         this.content = content;
+    }
+
+    int getId() {
+        return this.id;
+    }
+
+    String getAuthor() {
+        return this.author;
+    }
+
+    String getContent() {
+        return this.content;
+    }
+
+    void setId(int id) {
+        this.id = id;
+    }
+
+    void setAuthor(String author) {
         this.author = author;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getContent() {
-        return content;
+    void setContent(String content) {
+        this.content = content;
     }
 }
