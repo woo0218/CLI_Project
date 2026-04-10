@@ -60,19 +60,27 @@ public class App {
             WiseSaying wiseSaying = wiseSayingList.get(i);
             System.out.println("%d / %s / %s".formatted(wiseSaying.getId(), wiseSaying.getAuthor(), wiseSaying.getContent()));
         }
+
+//        IntStream.range(0, wiseSayingList.size())
+//                .map(i -> wiseSayingList.size() -1 -i) // 이게 내림차순
+//                .mapToObj(wiseSayingList::get)
+//                .forEach(
+//                        wiseSaying -> System.out.println("%d / %s / %s".formatted(wiseSaying.getId(), wiseSaying.getAuthor(), wiseSaying.getContent()))
+//                        );
     }
 
     void actionDelete(String cmd) {
-        String[] cmdBits = cmd.split("=");
+        int id = CmdSplitId(cmd);
 
-        if (cmdBits.length < 2 ||  cmdBits[1].isEmpty()) {
-            System.out.println("id를 입력해주세요.");
+        if (id < 0) {
             return;
         }
 
-        int id = Integer.parseInt(cmdBits[1]);
-
         WiseSaying wiseSaying = findById(id);
+
+        if (wiseSaying == null) {
+            return;
+        }
 
         delete(wiseSaying);
 
@@ -84,16 +92,17 @@ public class App {
     }
 
     void actionModify(String cmd) {
-        String[] cmdBits = cmd.split("=");
+        int id = CmdSplitId(cmd);
 
-        if (cmdBits.length < 2 ||  cmdBits[1].isEmpty()) {
-            System.out.println("id를 입력해주세요.");
+        if (id < 0) {
             return;
         }
 
-        int id = Integer.parseInt(cmdBits[1]);
-
         WiseSaying wiseSaying = findById(id);
+
+        if (wiseSaying == null) {
+            return;
+        }
 
         System.out.printf("명언(기존) : %s\n",  wiseSaying.getContent());
         System.out.print("명언 : ");
@@ -113,6 +122,8 @@ public class App {
         wiseSaying.setAuthor(author);
     }
 
+    // =================================== 연속적으로 사용되는 기능 한번에 정의 =======================================
+
     WiseSaying findById(int id) {
         WiseSaying wiseSaying = null;
         for (int i = 0; i < wiseSayingList.size(); i++) {
@@ -127,6 +138,24 @@ public class App {
         }
 
         return wiseSaying;
+
+//        return wiseSayingList.stream()
+//                .filter(ws -> ws.getId() == id)
+//                .findFirst()
+//                .orElse(null);
+    }
+
+
+
+    int CmdSplitId(String cmd) {
+        String[] cmdBits = cmd.split("=");
+
+        if (cmdBits.length < 2 ||  cmdBits[1].isEmpty()) {
+            System.out.println("id를 입력해주세요.");
+            return -1;
+        }
+
+        return Integer.parseInt(cmdBits[1]);
     }
 }
 
