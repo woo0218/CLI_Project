@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     int lastId = 0;
-    List<WiseSaying> wiseSayingList = new ArrayList<>();
+    private final List<WiseSaying> wiseSayingList = new ArrayList<>();
 
     void run () {
         System.out.println("== 명언 앱 ==");
@@ -16,20 +16,19 @@ public class App {
             System.out.print("명령) ");
             String cmd = scanner.nextLine().trim();
 
-            if (cmd.equals("종료")) {
-                System.out.println("프로그램을 종료합니다.");
-                break;
-            } else  if (cmd.equals("등록")) {
-                actionWrite();
-            } else if (cmd.equals("목록")) {
-                actionList();
-            } else if (cmd.startsWith("삭제")) {
-                actionDelete(cmd);
-            } else if (cmd.startsWith("수정")) {
-                actionModify(cmd);
+            Rq rq = new Rq(cmd);
+
+            switch (rq.getActionName()) {
+                case "종료" -> {
+                    System.out.println("프로그램을 종료합니다.");
+                    return;
+                }
+                case "등록" -> actionWrite();
+                case "목록" ->  actionList();
+                case "삭제" -> actionDelete(rq);
+                case "수정" -> actionModify(rq);
             }
         }
-        scanner.close();
     }
 
     void actionWrite() {
@@ -45,7 +44,7 @@ public class App {
     }
 
     WiseSaying write (String author, String content) {
-        WiseSaying wiseSaying = new WiseSaying(++lastId, author, content );
+        WiseSaying wiseSaying = new WiseSaying(++lastId, author, content);
 
         wiseSayingList.add(wiseSaying);
 
@@ -69,10 +68,11 @@ public class App {
 //                        );
     }
 
-    void actionDelete(String cmd) {
-        int id = CmdSplitId(cmd);
+    void actionDelete(Rq rq) {
+        int id = rq.getParamAsInt("id", -1);
 
-        if (id < 0) {
+        if (id == -1) {
+            System.out.println("숫자를 입력해주세요.");
             return;
         }
 
@@ -91,10 +91,11 @@ public class App {
         wiseSayingList.remove(wiseSaying);
     }
 
-    void actionModify(String cmd) {
-        int id = CmdSplitId(cmd);
+    void actionModify(Rq rq) {
+        int id = rq.getParamAsInt("id", -1);
 
-        if (id < 0) {
+        if (id < -1) {
+            System.out.println("숫자를 입력해주세요.");
             return;
         }
 
@@ -104,11 +105,11 @@ public class App {
             return;
         }
 
-        System.out.printf("명언(기존) : %s\n",  wiseSaying.getContent());
+        System.out.printf("명언(기존) : %s\n", wiseSaying.getContent());
         System.out.print("명언 : ");
         String content = scanner.nextLine().trim();
 
-        System.out.printf("작가(기존) : %s\n",  wiseSaying.getAuthor());
+        System.out.printf("작가(기존) : %s\n", wiseSaying.getAuthor());
         System.out.print("작가 : ");
         String author = scanner.nextLine().trim();
 
@@ -145,17 +146,6 @@ public class App {
 //                .orElse(null);
     }
 
-
-
-    int CmdSplitId(String cmd) {
-        String[] cmdBits = cmd.split("=");
-
-        if (cmdBits.length < 2 ||  cmdBits[1].isEmpty()) {
-            System.out.println("id를 입력해주세요.");
-            return -1;
-        }
-
-        return Integer.parseInt(cmdBits[1]);
-    }
 }
+
 

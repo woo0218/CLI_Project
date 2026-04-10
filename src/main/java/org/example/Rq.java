@@ -1,14 +1,14 @@
 package org.example;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Rq {
     private final String actionName;
     private final Map<String, String> paramsMap;
 
     Rq(String cmd) {
-        paramsMap = new HashMap<>();
 
         String[] cmdBits = cmd.split("\\?");
         actionName = cmdBits[0];
@@ -16,19 +16,13 @@ public class Rq {
 
         String queryString = cmdBits[1];
 
-        String[] queryStringBits = queryString.split("&");
-
-        for (String queryParam : queryStringBits) {
-
-            String[] queryParamBits = queryParam.split("=", 2);
-            String key = queryParamBits[0].trim();
-            String value = queryParamBits.length > 1 ? queryParamBits[1].trim() : "";
-
-            if (value.isEmpty()) {
-                continue;
-            }
-            paramsMap.put(key, value);
-        }
+        paramsMap = Arrays.stream(queryString.split("&"))
+                .map(part -> part.split("=", 2))
+                .filter(bits -> bits.length > 0 && !bits[0].trim().isEmpty()  &&  !bits[1].trim().isEmpty())
+                .collect(Collectors.toMap(
+                        bits -> bits[0].trim(),
+                        bits -> bits[1].trim()
+                ));
 
     }
 
